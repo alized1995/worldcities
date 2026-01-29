@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WorldCities.Api.Data;
+using WorldCities.Api.DTO;
 using WorldCities.Api.Models;
 
 namespace WorldCities.Api.Controllers
@@ -17,9 +18,15 @@ namespace WorldCities.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<City>>> GetCities()
+        public async Task<ActionResult<IEnumerable<CityDTO>>> GetCities()
         {
-            return await _context.Cities.ToListAsync();
+            return await _context.Cities.Select(c => new CityDTO
+            {
+                Id = c.Id,
+                Name = c.Name,
+                Lat = c.Lat,
+                Lon = c.Lon
+            }).ToListAsync();
         }
     }
 }
