@@ -9,6 +9,13 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddCors(options => {
+    options.AddPolicy("AngularPolicy", policy => {
+        policy.WithOrigins("http://localhost:4200") // Angular URL
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
 
 var app = builder.Build();
 
@@ -18,7 +25,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.UseCors("AngularPolicy");
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
