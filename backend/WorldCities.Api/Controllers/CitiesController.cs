@@ -18,15 +18,18 @@ namespace WorldCities.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CityDTO>>> GetCities()
+        public async Task<ActionResult<ApiResult<CityDTO>>> GetCities(int pageIndex = 0, int pageSize = 10)
         {
-            return await _context.Cities.Select(c => new CityDTO
+            return await ApiResult<CityDTO>.CreateAsync(_context.Cities.Select(c => new CityDTO
             {
                 Id = c.Id,
                 Name = c.Name,
                 Lat = c.Lat,
                 Lon = c.Lon
-            }).ToListAsync();
+            }),
+            pageIndex,
+            pageSize
+            );
         }
     }
 }
