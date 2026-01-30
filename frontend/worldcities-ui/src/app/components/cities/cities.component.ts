@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { City } from '../../interfaces/city';
@@ -17,7 +17,7 @@ import { debounceTime, distinctUntilChanged, Subject, Subscription } from 'rxjs'
   templateUrl: './cities.component.html',
   styleUrl: './cities.component.scss'
 })
-export class CitiesComponent implements OnInit {
+export class CitiesComponent implements OnInit, OnDestroy {
   public cities: City[] = [];
   public displayedColumns: string[] = ['id', 'name', 'lat', 'lon'];
   
@@ -75,5 +75,9 @@ export class CitiesComponent implements OnInit {
       },
       error: (err) => console.error(err)
     });
+  }
+
+  ngOnDestroy(){
+    this.filterSubscription?.unsubscribe();
   }
 }

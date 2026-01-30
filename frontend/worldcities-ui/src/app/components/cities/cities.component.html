@@ -1,7 +1,7 @@
 <h2>Cities</h2>
 <mat-form-field>
   <mat-label>Filter by Name</mat-label>
-  <input matInput (keyup)="onFilterTextChanged($any($event.target).value)" 
+  <input matInput #filterInput (keyup)="onFilterTextChanged(filterInput.value)" 
          placeholder="Ex. New York">
 </mat-form-field>
 <table mat-table [dataSource]="cities" class="mat-elevation-z8"
