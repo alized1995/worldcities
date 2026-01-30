@@ -8,6 +8,7 @@ import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatSortModule, Sort } from '@angular/material/sort';
 import { MatFormField } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { debounceTime, distinctUntilChanged, Subject, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-cities',
@@ -27,16 +28,26 @@ export class CitiesComponent implements OnInit {
   sortColumn: string = "name";
   sortOrder: string = "asc"
   public filterQuery: string | null = null;
+  private filterTextChanged: Subject<string> = new Subject<string>;
+  private filterSubscription?: Subscription;
 
   private http = inject(HttpClient);
 
   ngOnInit(): void {
     this.loadData();
+
+    this.filterSubscription = this.filterTextChanged.pipe(
+      debounceTime(400),
+      distinctUntilChanged()
+    ).subscribe(query => {
+      this.filterQuery = query;
+      this.pageIndex = 0;
+      this.loadData();
+  });
   }
 
   onFilterTextChanged(filterText: string){
-    this.filterQuery = filterText;
-    this.loadData();
+    this.filterTextChanged.next(filterText);
   }
 
   getData(event: PageEvent){
