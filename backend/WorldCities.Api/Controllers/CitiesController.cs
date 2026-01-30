@@ -41,5 +41,33 @@ namespace WorldCities.Api.Controllers
             sortOrder
             );
         }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<City>> GetCity(int id)
+        {
+            var city = await _context.Cities.FindAsync(id);
+            if (city == null) return NotFound();
+
+            return city;
+
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutCity(int id, City city)
+        {
+            if (id != city.Id) return BadRequest();
+
+            _context.Entry(city).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<City>> PostCity(City city)
+        {
+            await _context.Cities.AddAsync(city);
+            await _context.SaveChangesAsync();
+            return CreatedAtAction("GetCity", new { id = city.Id }, city);
+        }
     }
 }
