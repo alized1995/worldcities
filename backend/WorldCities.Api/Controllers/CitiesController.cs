@@ -18,15 +18,23 @@ namespace WorldCities.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<ApiResult<CityDTO>>> GetCities(int pageIndex = 0, int pageSize = 10, string? sortColumn = null, string? sortOrder = null)
+        public async Task<ActionResult<ApiResult<CityDTO>>> GetCities(int pageIndex = 0, int pageSize = 10, string? sortColumn = null, string? sortOrder = null, string? filterQuery = null)
         {
-            return await ApiResult<CityDTO>.CreateAsync(_context.Cities.Select(c => new CityDTO
+
+            var cities = _context.Cities.Select(c => new CityDTO
             {
                 Id = c.Id,
                 Name = c.Name,
                 Lat = c.Lat,
                 Lon = c.Lon
-            }),
+            });
+
+            if (!string.IsNullOrEmpty(filterQuery))
+            {
+                cities = cities.Where(c => c.Name.ToLower().Contains(filterQuery.ToLower()));
+            }
+
+            return await ApiResult<CityDTO>.CreateAsync(cities,
             pageIndex,
             pageSize,
             sortColumn,

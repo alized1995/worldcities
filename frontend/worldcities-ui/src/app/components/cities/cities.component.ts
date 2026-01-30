@@ -6,11 +6,13 @@ import { MatTableModule } from '@angular/material/table';
 import { ApiResult } from '../../interfaces/api-result';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatSortModule, Sort } from '@angular/material/sort';
+import { MatFormField } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-cities',
   standalone: true,
-  imports: [MatTableModule, MatPaginatorModule, MatSortModule],
+  imports: [MatTableModule, MatPaginatorModule, MatSortModule, MatFormField,MatInputModule],
   templateUrl: './cities.component.html',
   styleUrl: './cities.component.scss'
 })
@@ -24,10 +26,16 @@ export class CitiesComponent implements OnInit {
   totalCount: number = 0;
   sortColumn: string = "name";
   sortOrder: string = "asc"
+  public filterQuery: string | null = null;
 
   private http = inject(HttpClient);
 
   ngOnInit(): void {
+    this.loadData();
+  }
+
+  onFilterTextChanged(filterText: string){
+    this.filterQuery = filterText;
     this.loadData();
   }
 
@@ -46,8 +54,9 @@ export class CitiesComponent implements OnInit {
               `?pageIndex=${this.pageIndex}` +
               `&pageSize=${this.pageSize}` +
               `&sortColumn=${this.sortColumn}` +
-              `&sortOrder=${this.sortOrder}`;
-              
+              `&sortOrder=${this.sortOrder}` +
+              (this.filterQuery ? `&filterQuery=${this.filterQuery}` : '');
+
     this.http.get<ApiResult<City>>(url).subscribe({
       next: (res) => {
         this.cities = res.data;
