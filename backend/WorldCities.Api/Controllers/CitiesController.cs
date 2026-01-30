@@ -18,7 +18,7 @@ namespace WorldCities.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<ApiResult<CityDTO>>> GetCities(int pageIndex = 0, int pageSize = 10)
+        public async Task<ActionResult<ApiResult<CityDTO>>> GetCities(int pageIndex = 0, int pageSize = 10, string? sortColumn = null, string? sortOrder = null)
         {
             return await ApiResult<CityDTO>.CreateAsync(_context.Cities.Select(c => new CityDTO
             {
@@ -28,7 +28,9 @@ namespace WorldCities.Api.Controllers
                 Lon = c.Lon
             }),
             pageIndex,
-            pageSize
+            pageSize,
+            sortColumn,
+            sortOrder
             );
         }
     }

@@ -3,24 +3,55 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { City } from '../../interfaces/city';
 import { MatTableModule } from '@angular/material/table';
+import { ApiResult } from '../../interfaces/api-result';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { MatSortModule, Sort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-cities',
   standalone: true,
-  imports: [MatTableModule],
+  imports: [MatTableModule, MatPaginatorModule, MatSortModule],
   templateUrl: './cities.component.html',
   styleUrl: './cities.component.scss'
 })
 export class CitiesComponent implements OnInit {
   public cities: City[] = [];
   public displayedColumns: string[] = ['id', 'name', 'lat', 'lon'];
+  
+  // pagination properties
+  pageIndex: number = 0;
+  pageSize: number = 10;
+  totalCount: number = 0;
+  sortColumn: string = "name";
+  sortOrder: string = "asc"
 
   private http = inject(HttpClient);
 
   ngOnInit(): void {
-    this.http.get<City[]>(environment.baseUrl + 'api/cities').subscribe({
+    this.loadData();
+  }
+
+  getData(event: PageEvent){
+    this.pageIndex = event.pageIndex;
+    this.pageSize = event.pageSize;
+    this.loadData();
+  }
+
+  loadData(sortEvent: Sort | null = null){
+    if (sortEvent) {
+    this.sortColumn = sortEvent.active;
+    this.sortOrder = sortEvent.direction;
+  }
+    const url = `${environment.baseUrl}api/cities` +
+              `?pageIndex=${this.pageIndex}` +
+              `&pageSize=${this.pageSize}` +
+              `&sortColumn=${this.sortColumn}` +
+              `&sortOrder=${this.sortOrder}`;
+              
+    this.http.get<ApiResult<City>>(url).subscribe({
       next: (res) => {
-        this.cities = res;
+        this.cities = res.data;
+        this.totalCount = res.totalCount;
       },
       error: (err) => console.error(err)
     });
