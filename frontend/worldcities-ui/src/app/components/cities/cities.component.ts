@@ -9,11 +9,13 @@ import { MatSortModule, Sort } from '@angular/material/sort';
 import { MatFormField } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { debounceTime, distinctUntilChanged, Subject, Subscription } from 'rxjs';
+import { RouterModule } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-cities',
   standalone: true,
-  imports: [MatTableModule, MatPaginatorModule, MatSortModule, MatFormField,MatInputModule],
+  imports: [MatTableModule, MatPaginatorModule, MatSortModule, MatFormField, MatInputModule, RouterModule, MatButtonModule],
   templateUrl: './cities.component.html',
   styleUrl: './cities.component.scss'
 })

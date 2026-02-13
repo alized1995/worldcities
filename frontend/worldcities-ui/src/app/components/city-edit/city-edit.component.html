@@ -1,1 +1,36 @@
-<p>city-edit works!</p>
+<div class="city-edit">
+  <h1>{{ id ? 'Edit' : 'Add New' }} City</h1>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+    <mat-form-field appearance="fill">
+      <mat-label>City Name</mat-label>
+      <input matInput formControlName="name" placeholder="Name of the city">
+      <mat-error *ngIf="form.get('name')?.hasError('required')">
+        City name is <strong>required</strong>.
+      </mat-error>
+    </mat-form-field>
+
+    <div class="coordinates">
+      <mat-form-field appearance="fill">
+        <mat-label>Latitude</mat-label>
+        <input matInput type="number" formControlName="lat">
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Longitude</mat-label>
+        <input matInput type="number" formControlName="lon">
+      </mat-form-field>
+    </div>
+
+    <div class="commands">
+      <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">
+        {{ id ? 'Save' : 'Create' }}
+      </button>
+      <button mat-stroked-button color="warn" type="button" (click)="router.navigate(['/cities'])">
+        Cancel
+      </button>
+    </div>
+
+  </form>
+</div>
