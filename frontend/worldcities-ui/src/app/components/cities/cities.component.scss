@@ -1,0 +1,10 @@
+.header-container {
+  margin-bottom: 20px;
+}
+
+.action-bar {
+  display: flex;
+  justify-content: space-between; // Filter left par aur Add button right par
+  align-items: center;
+  gap: 15px;
+}

@@ -2,6 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import {
   FormControl,
   FormGroup,
+  FormsModule,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
@@ -11,11 +12,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
 import { MatFormField } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-city-edit',
   standalone: true,
-  imports: [ReactiveFormsModule, MatFormField, MatInputModule],
+  imports: [ReactiveFormsModule, MatFormField, MatInputModule, CommonModule],
   templateUrl: './city-edit.component.html',
   styleUrl: './city-edit.component.scss',
 })
@@ -36,10 +38,14 @@ export class CityEditComponent implements OnInit {
       lat: new FormControl('', [
         Validators.required,
         Validators.pattern('^-?[0-9]\\d*(\\.\\d+)?$'), // Numeric pattern check
+        Validators.min(-90),
+        Validators.max(90)
       ]),
       lon: new FormControl('', [
         Validators.required,
         Validators.pattern('^-?[0-9]\\d*(\\.\\d+)?$'),
+        Validators.min(-180),
+        Validators.max(180)
       ]),
     });
 

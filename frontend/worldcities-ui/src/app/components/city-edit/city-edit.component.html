@@ -1,36 +1,64 @@
 <div class="city-edit">
-  <h1>{{ id ? 'Edit' : 'Add New' }} City</h1>
+  <h1>{{ id ? "Edit" : "Add New" }} City</h1>
 
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
-
     <mat-form-field appearance="fill">
       <mat-label>City Name</mat-label>
-      <input matInput formControlName="name" placeholder="Name of the city">
+      <input matInput formControlName="name" placeholder="Name of the city" />
       <mat-error *ngIf="form.get('name')?.hasError('required')">
-        City name is <strong>required</strong>.
+        Name is required.
       </mat-error>
     </mat-form-field>
 
     <div class="coordinates">
       <mat-form-field appearance="fill">
         <mat-label>Latitude</mat-label>
-        <input matInput type="number" formControlName="lat">
+        <input matInput type="number" formControlName="lat" />
+        <mat-error *ngIf="form.get('lat')?.hasError('required')">
+          Latitude is required.
+        </mat-error>
+        <mat-error
+          *ngIf="
+            form.get('lat')?.hasError('min') || form.get('lat')?.hasError('max')
+          "
+        >
+          Latitude must be between -90 and 90.
+        </mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="fill">
         <mat-label>Longitude</mat-label>
-        <input matInput type="number" formControlName="lon">
+        <input matInput type="number" formControlName="lon" />
+         <mat-error *ngIf="form.get('lon')?.hasError('required')">
+          Longitude is required.
+        </mat-error>
+        <mat-error
+          *ngIf="
+            form.get('lon')?.hasError('min') || form.get('lon')?.hasError('max')
+          "
+        >
+          Longitude must be between -180 and 180.
+        </mat-error>
       </mat-form-field>
     </div>
 
     <div class="commands">
-      <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">
-        {{ id ? 'Save' : 'Create' }}
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        [disabled]="form.invalid"
+      >
+        {{ id ? "Save" : "Create" }}
       </button>
-      <button mat-stroked-button color="warn" type="button" (click)="router.navigate(['/cities'])">
+      <button
+        mat-stroked-button
+        color="warn"
+        type="button"
+        (click)="router.navigate(['/cities'])"
+      >
         Cancel
       </button>
     </div>
-
   </form>
 </div>
