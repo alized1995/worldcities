@@ -1,9 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WorldCities.Api.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace WorldCities.Api.Data
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
