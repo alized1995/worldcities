@@ -11,7 +11,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddCors(options => {
     options.AddPolicy("AngularPolicy", policy => {
-        policy.WithOrigins("http://localhost:4200") // Angular URL
+        policy.WithOrigins("http://localhost:50131") // Angular URL
               .AllowAnyHeader()
               .AllowAnyMethod();
     });                                                          

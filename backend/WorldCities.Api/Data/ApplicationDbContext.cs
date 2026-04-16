@@ -10,6 +10,8 @@ namespace WorldCities.Api.Data
         {
         }
         public DbSet<City> Cities => Set<City>();
+        public DbSet<Country> Countries => Set<Country>();
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
