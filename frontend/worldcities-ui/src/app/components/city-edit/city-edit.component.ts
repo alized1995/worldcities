@@ -12,12 +12,16 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
 import { MatFormField } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatSelect, MatOption } from '@angular/material/select';
 import { CommonModule } from '@angular/common';
+import { Country } from '../../interfaces/country';
+import { count } from 'console';
+import { ApiResult } from '../../interfaces/api-result';
 
 @Component({
   selector: 'app-city-edit',
   standalone: true,
-  imports: [ReactiveFormsModule, MatFormField, MatInputModule, CommonModule],
+  imports: [ReactiveFormsModule, MatFormField, MatInputModule, MatSelect, MatOption, CommonModule],
   templateUrl: './city-edit.component.html',
   styleUrl: './city-edit.component.scss',
 })
@@ -27,6 +31,7 @@ export class CityEditComponent implements OnInit {
   form!: FormGroup;
   city?: City;
   id?: number;
+  countries: Country[] = [];
 
   private http = inject(HttpClient);
   private activatedRoute = inject(ActivatedRoute);
@@ -47,12 +52,21 @@ export class CityEditComponent implements OnInit {
         Validators.min(-180),
         Validators.max(180)
       ]),
+      countryId: new FormControl('', Validators.required)
     });
 
     this.loadData();
   }
 
   loadData() {
+    // load all countries for dropdown
+    const countriesUrl = `${environment.baseUrl}api/countries?pageSize=9999`;
+    this.http.get<ApiResult<Country>>(countriesUrl).subscribe({
+      next: (result) => {
+        this.countries = result.data;
+      },
+      error: (error) => console.error(error),
+    });
     const idParam = this.activatedRoute.snapshot.paramMap.get('id');
     this.id = idParam ? +idParam : 0;
     if (this.id) {

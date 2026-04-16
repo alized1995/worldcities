@@ -1,4 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using OfficeOpenXml;
+using System.ComponentModel;
 using WorldCities.Api.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,11 +13,12 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddCors(options => {
     options.AddPolicy("AngularPolicy", policy => {
-        policy.WithOrigins("http://localhost:50131") // Angular URL
+        policy.WithOrigins("http://localhost:58942") // Angular URL
               .AllowAnyHeader()
               .AllowAnyMethod();
     });                                                          
 });
+ExcelPackage.License.SetNonCommercialPersonal("Ali");
 
 var app = builder.Build();
 

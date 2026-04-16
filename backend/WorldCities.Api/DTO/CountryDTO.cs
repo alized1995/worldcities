@@ -1,11 +1,17 @@
-﻿namespace WorldCities.Api.DTO
+﻿using System.Text.Json.Serialization;
+
+namespace WorldCities.Api.DTO
 {
     public class CountryDTO
     {
             public int Id { get; set; }
             public string Name { get; set; } = null!;
-            public string ISO1 { get; set; } = null!;
+
+            [JsonPropertyName("iso2")]
             public string ISO2 { get; set; } = null!;
+
+            [JsonPropertyName("iso3")]
+            public string ISO3 { get; set; } = null!;
             public int? TotCities { get; set; } // Extra field for analytics
         }
 }
